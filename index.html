@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resizable Live Code Editor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Resizable Live Code Editor</h1>
+  </header>
+  <main>
+    <div class="editor-container">
+      <div class="editor-box" id="htmlBox">
+        <textarea id="htmlCode" placeholder="Write HTML here..."></textarea>
+        <label>HTML</label>
+      </div>
+      <div class="editor-box" id="cssBox">
+        <textarea id="cssCode" placeholder="Write CSS here..."></textarea>
+        <label>CSS</label>
+      </div>
+      <div class="editor-box" id="jsBox">
+        <textarea id="jsCode" placeholder="Write JavaScript here..."></textarea>
+        <label>JavaScript</label>
+      </div>
+    </div>
+    <iframe id="output" title="Live Output"></iframe>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #121212;
+  color: #ffffff;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Prevent page scrolling */
+}
+
+header {
+  text-align: center;
+  padding: 10px;
+  background: #1e1e1e;
+  border-bottom: 1px solid #333;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden; /* Prevent scrolling within the main section */
+}
+
+.editor-container {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  gap: 10px;  /* Add space between editor boxes */
+  padding: 10px;
+  overflow: auto;
+}
+
+.editor-box {
+  display: flex;
+  flex-direction: column;
+  resize: both; /* Allow resizing */
+  overflow: auto; /* Show scrollbars only when needed */
+  min-width: 250px; /* Minimum width to avoid too small editors */
+  max-width: 33%; /* Max width of each box is one-third of the container */
+  flex-grow: 1;
+  margin: 5px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  position: relative;
+  background: #1e1e1e;
+}
+
+textarea {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  resize: none; /* Prevent resizing inside the resizable box */
+  outline: none;
+  background: #1e1e1e;
+  color: #ffffff;
+  font-family: monospace;
+  font-size: 1rem;
+  border-radius: 5px;
+  overflow: auto;
+}
+
+textarea::placeholder {
+  color: #777;
+}
+
+label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 0.9rem;
+  color: #777;
+  background: #121212;
+  padding: 2px 5px;
+  border-radius: 5px;
+}
+
+iframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: #ffffff;
+  margin: 5px;
+  border-radius: 5px;
+}
+
+</style>
+
+<script>
+    // Elements
+const htmlCode = document.getElementById("htmlCode");
+const cssCode = document.getElementById("cssCode");
+const jsCode = document.getElementById("jsCode");
+const output = document.getElementById("output");
+
+// Default content for demonstration
+htmlCode.value = `
+<div id="output-container">
+  <h2>Welcome to Live Code Editor!</h2>
+  <p>Resize the editor boxes to customize your workspace.</p>
+</div>`;
+cssCode.value = `
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+h2 {
+  color: #333;
+}
+
+p {
+  color: #666;
+}`;
+jsCode.value = `
+console.log('This is a live code editor!');`;
+
+// Update the output in real-time
+function updateOutput() {
+  const html = htmlCode.value;
+  const css = `<style>${cssCode.value}</style>`;
+  const js = `<script>${jsCode.value}<\/script>`;
+  
+  const fullCode = html + css + js;
+  output.srcdoc = fullCode;
+}
+
+// Add event listeners to update the output on input
+htmlCode.addEventListener("input", updateOutput);
+cssCode.addEventListener("input", updateOutput);
+jsCode.addEventListener("input", updateOutput);
+
+// Initialize with default content
+updateOutput();
+</script>
